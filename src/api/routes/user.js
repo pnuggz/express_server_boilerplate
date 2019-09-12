@@ -1,13 +1,21 @@
-import {Router} from "express"
+import { Router } from "express"
 
-const userRouter = (app) => {
+import UserService from "../../services/userService"
+
+const UserRouter = (app) => {
   const route = Router()
 
   app.use('/users', route);
 
-  route.get('/me', (req, res) => {
-    res.send("TEST")
-  });
+  route.get('/me', 
+    // ADD MIDDLEWARE VALIDATOR HERE
+    async (req, res) => {
+      const userData = "TEST"
+
+      const { user } = await UserService.test(userData)
+      return res.json({ user })
+    }
+  );
 };
 
-export default userRouter
+export default UserRouter
