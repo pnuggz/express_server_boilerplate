@@ -1,21 +1,33 @@
-import { Router } from "express"
+import { Router } from "express";
 
-import UserService from "../../services/userService"
+import middlewares from "./middlewares/index";
+const isAuth = middlewares.isAuth;
+const renewToken = middlewares.renewToken;
+
+import UserService from "../../services/userService";
 
 const UserRouter = (app) => {
-  const route = Router()
+  const route = Router();
 
-  app.use('/users', route);
+  app.use("/users", route);
 
-  route.get('/me', 
-    // ADD MIDDLEWARE VALIDATOR HERE
-    async (req, res) => {
-      const userData = "TEST"
+  route.get("/me", isAuth, renewToken, async (req, res) => {
+    const returnData = req.returnData;
 
-      const { user } = await UserService.test(userData)
-      return res.json({ user })
+    const userDataResponse = await UserService.get(req);
+    if (userDataResponse.status.code !== 200) {
+      returnData.status = userDataResponse.status;
+      res.status(userDataResponse.status.code).json(returnData);
     }
-  );
+
+    returnData.data = userDataResponse.data;
+    returnData.status = {
+      code: 200,
+      err: ``,
+      msg: ``,
+    };
+    res.json(returnData);
+  });
 };
 
-export default UserRouter
+export default UserRouter;

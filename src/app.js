@@ -1,15 +1,20 @@
-import express from 'express'
+import express from "express";
 
-import Logger from './loaders/logger';
-import config from './config';
-import Loaders from './loaders'
+import Logger from "./loaders/logger";
+import config from "./config";
+import { serverLoader } from "./loaders";
+
+// CHANGE TO HTTPS WHEN USING REAL SERVER
+import https from "http"
 
 const startServer = () => {
-  const app = express()
+  const app = express();
 
-  Loaders({ expressApp: app })
+  serverLoader({ expressApp: app });
 
-  app.listen(config.port, err => {
+  const server = https.Server(app);
+
+  server.listen(config.port, err => {
     if (err) {
       Logger.error(err);
       process.exit(1);
@@ -21,6 +26,6 @@ const startServer = () => {
       ################################################
     `);
   });
-}
+};
 
-startServer()
+startServer();
