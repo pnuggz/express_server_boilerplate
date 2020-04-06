@@ -172,5 +172,4 @@ If a bad token is used, the following response will be received
 
 ## Authors
 
-- **Ryan Nugraha** - _Initial work_ - (https://github.com/pnuggz)
-- **Firman C** - _Major contributor_ - (https://github.com/firmanc)
+- **Ryan Nugraha** - https://github.com/pnuggz
